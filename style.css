@@ -77,6 +77,21 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     transition: var(--theme-transition);
+    position: relative;
+}
+
+/* Cybernetic Noise/Grain Texture Layer */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    opacity: 0.038;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 /* Custom Tech Cursor */
@@ -1604,6 +1619,47 @@ textarea.form-input {
     -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
     opacity: 0.8;
     z-index: 1;
+}
+
+/* Classy 3D Cube Loader Styling */
+.preloader-cube-wrapper {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 2.5rem;
+    perspective: 300px;
+    transform-style: preserve-3d;
+}
+
+.cube3d {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(-22deg) rotateY(45deg);
+    animation: rotateCube3D 6s linear infinite;
+}
+
+.cube3d-face {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 1px solid rgba(129, 140, 248, 0.55);
+    background: rgba(129, 140, 248, 0.04);
+    box-shadow: inset 0 0 10px rgba(129, 140, 248, 0.2);
+    transition: border-color 0.5s ease;
+}
+
+/* Cube Face Positioning */
+.face-front  { transform: rotateY(  0deg) translateZ(30px); }
+.face-back   { transform: rotateY(180deg) translateZ(30px); }
+.face-left   { transform: rotateY(-90deg) translateZ(30px); }
+.face-right  { transform: rotateY( 90deg) translateZ(30px); }
+.face-top    { transform: rotateX( 90deg) translateZ(30px); }
+.face-bottom { transform: rotateX(-90deg) translateZ(30px); }
+
+@keyframes rotateCube3D {
+    0% { transform: rotateX(-22deg) rotateY(0deg); }
+    100% { transform: rotateX(-22deg) rotateY(360deg); }
 }
 
 .preloader-inner {

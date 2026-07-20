@@ -272,13 +272,21 @@ tiltElements.forEach(card => {
         card.style.transform = `perspective(1000px) translateY(-8px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
         card.style.transition = 'none'; // Disable transition during mouse move for responsiveness
         
+        // Dynamic Shadow displacement based on mouse offset (simulates dynamic lighting)
+        const maxShadow = 22; // max shadow displacement in px
+        const shadowX = -(dx * maxShadow).toFixed(2);
+        const shadowY = -(dy * maxShadow).toFixed(2);
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
+        const shadowColor = isDark ? 'rgba(0, 0, 0, 0.55)' : 'rgba(15, 23, 42, 0.08)';
+        card.style.boxShadow = `${shadowX}px ${shadowY}px 32px ${shadowColor}`;
+        
         // Offset elements with data-3d-depth within the card
         const depthElements = card.querySelectorAll('[data-3d-depth]');
         depthElements.forEach(el => {
             const depth = parseFloat(el.getAttribute('data-3d-depth')) || 0;
             // Scale horizontal/vertical offset translation based on depth
-            const shiftX = (dx * (depth * 0.15)).toFixed(2);
-            const shiftY = (dy * (depth * 0.15)).toFixed(2);
+            const shiftX = (dx * (depth * 0.18)).toFixed(2);
+            const shiftY = (dy * (depth * 0.18)).toFixed(2);
             el.style.transform = `translate3d(${shiftX}px, ${shiftY}px, ${depth}px)`;
             el.style.transition = 'none';
         });
@@ -287,7 +295,8 @@ tiltElements.forEach(card => {
     card.addEventListener('mouseleave', () => {
         // Reset card style smoothly
         card.style.transform = '';
-        card.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+        card.style.boxShadow = '';
+        card.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.8s ease';
         
         // Reset depth elements inside card
         const depthElements = card.querySelectorAll('[data-3d-depth]');

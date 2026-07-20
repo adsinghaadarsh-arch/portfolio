@@ -49,6 +49,16 @@
     <div id="preloader" class="preloader">
         <div class="preloader-bg-grid"></div>
         <div class="preloader-inner">
+            <div class="preloader-cube-wrapper">
+                <div class="cube3d">
+                    <div class="cube3d-face face-front"></div>
+                    <div class="cube3d-face face-back"></div>
+                    <div class="cube3d-face face-left"></div>
+                    <div class="cube3d-face face-right"></div>
+                    <div class="cube3d-face face-top"></div>
+                    <div class="cube3d-face face-bottom"></div>
+                </div>
+            </div>
             <div class="preloader-box">
                 <h1 class="preloader-title">Aadarsh Portfolio</h1>
                 <div class="preloader-progress-container">
@@ -381,12 +391,12 @@
                         <div class="edu-icon">
                             <i class="fa-solid fa-school"></i>
                         </div>
-                        <span class="edu-badge">[ELEMENTARY & SECONDARY]</span>
+                        <span class="edu-badge">[PRIMARY &amp; SECONDARY]</span>
                     </div>
                     <h3 class="edu-title">Mount Assisi School</h3>
-                    <div class="edu-institution">Secondary & Senior Secondary Schooling</div>
+                    <div class="edu-institution">Primary, Secondary &amp; Senior Secondary Schooling</div>
                     <p class="edu-desc">
-                        Completed secondary and higher secondary education with a specialized focus on the Commerce stream, including accountancy, business studies, and economics.
+                        Completed primary, secondary, and higher secondary education with a specialized focus on the Commerce stream, including accountancy, business studies, and economics.
                     </p>
                 </div>
 
@@ -506,61 +516,85 @@
                 </div>
 
                 <!-- Cert 5: Cyber Security AI -->
-                <div class="cert-card" data-3d-hover="">
+                <div class="cert-card" data-3d-hover="" data-cert-img="assets/cert_cyber_security.png">
                     <div class="cert-header">
                         <div class="cert-icon">
                             <i class="fa-solid fa-shield-halved"></i>
                         </div>
-                        <span class="cert-badge">[CYBERSECURITY]</span>
+                        <span class="cert-badge">[CYBERSECURITY &bull; 2026]</span>
                     </div>
-                    <h3 class="cert-title">Cyber Security with AI Tools</h3>
+                    <div class="cert-preview-container" data-3d-depth="15">
+                        <img src="assets/cert_cyber_security.png" alt="Cyber Security with AI Tools Certificate" class="cert-thumb" />
+                        <div class="cert-overlay-hover">
+                            <span class="btn-zoom"><i class="fa-solid fa-magnifying-glass-plus"></i> VIEW</span>
+                        </div>
+                    </div>
+                    <h3 class="cert-title" data-3d-depth="25">Cyber Security with AI Tools</h3>
                     <p class="cert-issuer">My Skills Academy (Indus Group)</p>
-                    <p class="cert-desc">
+                    <p class="cert-desc" data-3d-depth="10">
                         Completed training on deploying artificial intelligence applications in cybersecurity threats detection, malware classification, and safeguarding corporate IT assets.
                     </p>
                 </div>
 
                 <!-- Cert 6: Digital Marketing -->
-                <div class="cert-card" data-3d-hover="">
+                <div class="cert-card" data-3d-hover="" data-cert-img="assets/cert_digital_marketing.png">
                     <div class="cert-header">
                         <div class="cert-icon">
                             <i class="fa-solid fa-bullseye"></i>
                         </div>
-                        <span class="cert-badge">[MARKETING TECH]</span>
+                        <span class="cert-badge">[MARKETING TECH &bull; 2026]</span>
                     </div>
-                    <h3 class="cert-title">Digital Marketing with AI Tools</h3>
+                    <div class="cert-preview-container" data-3d-depth="15">
+                        <img src="assets/cert_digital_marketing.png" alt="Digital Marketing with AI Tools Certificate" class="cert-thumb" />
+                        <div class="cert-overlay-hover">
+                            <span class="btn-zoom"><i class="fa-solid fa-magnifying-glass-plus"></i> VIEW</span>
+                        </div>
+                    </div>
+                    <h3 class="cert-title" data-3d-depth="25">Digital Marketing with AI Tools</h3>
                     <p class="cert-issuer">My Skills Academy</p>
-                    <p class="cert-desc">
+                    <p class="cert-desc" data-3d-depth="10">
                         Focused on utilizing machine learning content engines, digital SEO auditing tools, predictive campaign metrics, and automation within marketing structures.
                     </p>
                 </div>
 
                 <!-- Cert 7: HP LIFE AI -->
-                <div class="cert-card" data-3d-hover="">
+                <div class="cert-card" data-3d-hover="" data-cert-img="assets/cert_hp_life.png">
                     <div class="cert-header">
                         <div class="cert-icon">
                             <i class="fa-solid fa-brain"></i>
                         </div>
-                        <span class="cert-badge">[AI FOR BUSINESS]</span>
+                        <span class="cert-badge">[AI FOR BUSINESS &bull; 2026]</span>
                     </div>
-                    <h3 class="cert-title">AI for Business Professionals</h3>
+                    <div class="cert-preview-container" data-3d-depth="15">
+                        <img src="assets/cert_hp_life.png" alt="HP LIFE AI for Business Professionals Certificate" class="cert-thumb" />
+                        <div class="cert-overlay-hover">
+                            <span class="btn-zoom"><i class="fa-solid fa-magnifying-glass-plus"></i> VIEW</span>
+                        </div>
+                    </div>
+                    <h3 class="cert-title" data-3d-depth="25">AI for Business Professionals</h3>
                     <p class="cert-issuer">HP LIFE</p>
-                    <p class="cert-desc">
+                    <p class="cert-desc" data-3d-depth="10">
                         Studied practical generative AI productivity models, automated client email workflows, and analytics interfaces to scale day-to-day corporate operations.
                     </p>
                 </div>
 
                 <!-- Cert 8: Google Workspace Gemini -->
-                <div class="cert-card" data-3d-hover="">
+                <div class="cert-card" data-3d-hover="" data-cert-img="assets/cert_workspace_gemini.png">
                     <div class="cert-header">
                         <div class="cert-icon">
                             <i class="fa-brands fa-google"></i>
                         </div>
-                        <span class="cert-badge">[CLOUD TOOLS]</span>
+                        <span class="cert-badge">[CLOUD TOOLS &bull; 2026]</span>
                     </div>
-                    <h3 class="cert-title">Google Workspace &amp; Gemini</h3>
+                    <div class="cert-preview-container" data-3d-depth="15">
+                        <img src="assets/cert_workspace_gemini.png" alt="Google Workspace &amp; Gemini Certificate" class="cert-thumb" />
+                        <div class="cert-overlay-hover">
+                            <span class="btn-zoom"><i class="fa-solid fa-magnifying-glass-plus"></i> VIEW</span>
+                        </div>
+                    </div>
+                    <h3 class="cert-title" data-3d-depth="25">Google Workspace &amp; Gemini</h3>
                     <p class="cert-issuer">Simplilearn &amp; Google Cloud</p>
-                    <p class="cert-desc">
+                    <p class="cert-desc" data-3d-depth="10">
                         Learned prompt engineering, integrating Gemini AI inside Docs, Sheets, and Slides, and automating daily data summaries and document templates.
                     </p>
                 </div>
