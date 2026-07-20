@@ -248,9 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// 3D TILT EFFECT FOR PREMIUM CARDS
+// ADVANCED 3D PARALLAX TILT EFFECT
 // ==========================================
-const tiltElements = document.querySelectorAll('.cert-card, .visual-card, .about-card, .edu-card');
+const tiltElements = document.querySelectorAll('[data-3d-hover]');
 
 tiltElements.forEach(card => {
     card.addEventListener('mousemove', (e) => {
@@ -264,21 +264,129 @@ tiltElements.forEach(card => {
         const dx = (x - xc) / xc;
         const dy = (y - yc) / yc;
         
-        // Calculate tilt rotations (max 8 degrees)
-        const tiltX = -(dy * 8).toFixed(2);
-        const tiltY = (dx * 8).toFixed(2);
+        // Calculate tilt rotations (max 10 degrees)
+        const tiltX = -(dy * 10).toFixed(2);
+        const tiltY = (dx * 10).toFixed(2);
         
-        // Apply transform styling
-        card.style.transform = `translateY(-8px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`;
+        // Apply tilt transform on the card itself
+        card.style.transform = `perspective(1000px) translateY(-8px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
         card.style.transition = 'none'; // Disable transition during mouse move for responsiveness
+        
+        // Offset elements with data-3d-depth within the card
+        const depthElements = card.querySelectorAll('[data-3d-depth]');
+        depthElements.forEach(el => {
+            const depth = parseFloat(el.getAttribute('data-3d-depth')) || 0;
+            // Scale horizontal/vertical offset translation based on depth
+            const shiftX = (dx * (depth * 0.15)).toFixed(2);
+            const shiftY = (dy * (depth * 0.15)).toFixed(2);
+            el.style.transform = `translate3d(${shiftX}px, ${shiftY}px, ${depth}px)`;
+            el.style.transition = 'none';
+        });
     });
 
     card.addEventListener('mouseleave', () => {
-        // Reset styles smoothly
+        // Reset card style smoothly
         card.style.transform = '';
-        card.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease, background-color 0.4s ease';
+        card.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+        
+        // Reset depth elements inside card
+        const depthElements = card.querySelectorAll('[data-3d-depth]');
+        depthElements.forEach(el => {
+            el.style.transform = '';
+            el.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+        });
     });
 });
+
+// ==========================================
+// 3D CERTIFICATE LIGHTBOX MODAL LOGIC
+// ==========================================
+const certModal = document.getElementById('cert-modal');
+const modalImg = document.getElementById('modal-image');
+const modalCaption = document.getElementById('modal-caption');
+const modalCloseBtn = document.getElementById('modal-close-btn');
+const modalOverlay = certModal ? certModal.querySelector('.modal-overlay') : null;
+const modalContainer3D = document.getElementById('modal-card-3d');
+
+// Open Lightbox
+document.querySelectorAll('.cert-card[data-cert-img]').forEach(card => {
+    card.addEventListener('click', (e) => {
+        // Prevent click if clicking direct link or other buttons
+        if (e.target.closest('a') || e.target.closest('button')) return;
+        
+        const imgUrl = card.getAttribute('data-cert-img');
+        const title = card.querySelector('.cert-title')?.textContent || 'Certificate';
+        
+        if (certModal && modalImg && modalCaption) {
+            modalImg.src = imgUrl;
+            modalCaption.textContent = title;
+            certModal.style.display = 'flex';
+            
+            // Force redraw/reflow for CSS transition to fire
+            certModal.offsetHeight;
+            
+            certModal.classList.add('active');
+            certModal.setAttribute('aria-hidden', 'false');
+            
+            // Disable scroll
+            document.body.style.overflow = 'hidden';
+        }
+    });
+});
+
+// Close Lightbox function
+function closeCertModal() {
+    if (!certModal) return;
+    certModal.classList.remove('active');
+    certModal.setAttribute('aria-hidden', 'true');
+    
+    // Enable scroll
+    document.body.style.overflow = '';
+    
+    // Delay hiding display to allow animation to complete
+    setTimeout(() => {
+        if (!certModal.classList.contains('active')) {
+            certModal.style.display = 'none';
+            if (modalImg) modalImg.src = '';
+        }
+    }, 450);
+}
+
+if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeCertModal);
+if (modalOverlay) modalOverlay.addEventListener('click', closeCertModal);
+
+// Close on Escape Key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && certModal && certModal.classList.contains('active')) {
+        closeCertModal();
+    }
+});
+
+// Modal 3D mouse track tilt (extremely immersive!)
+if (modalContainer3D) {
+    document.addEventListener('mousemove', (e) => {
+        if (!certModal || !certModal.classList.contains('active')) return;
+        
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        
+        const dx = (e.clientX - w / 2) / (w / 2); // -1 to 1
+        const dy = (e.clientY - h / 2) / (h / 2); // -1 to 1
+        
+        const tiltX = -(dy * 10).toFixed(2);
+        const tiltY = (dx * 10).toFixed(2);
+        
+        modalContainer3D.style.transform = `perspective(1500px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1) translateZ(0)`;
+        modalContainer3D.style.transition = 'none';
+    });
+    
+    certModal.addEventListener('mouseleave', () => {
+        if (modalContainer3D) {
+            modalContainer3D.style.transform = 'perspective(1500px) rotateX(0deg) rotateY(0deg) scale(1) translateZ(0)';
+            modalContainer3D.style.transition = 'transform 0.6s ease';
+        }
+    });
+}
 
 // ==========================================
 // SCROLL-TRIGGERED TIMELINE PROGRESS LINE
@@ -365,6 +473,38 @@ staggerContainers.forEach(container => {
 const preloader = document.getElementById('preloader');
 const preloaderBar = document.getElementById('preloader-progress-bar');
 const preloaderPercent = document.getElementById('preloader-percentage');
+const preloaderLogs = document.getElementById('preloader-logs');
+
+const logMessages = [
+    { threshold: 0, text: "> SYSTEM INITIALIZATION..." },
+    { threshold: 12, text: "> STACK_CHECK: HTML5_CSS3_JS... OK" },
+    { threshold: 24, text: "> IMPORTING CREDENTIALS: ACCA_ASSETS... OK" },
+    { threshold: 38, text: "> PARSING BUSINESS_ANALYSIS_MODELS... OK" },
+    { threshold: 52, text: "> LOADING SPREADSHEETS (MS_EXCEL_API)... OK" },
+    { threshold: 68, text: "> INJECTING 3D RENDERING PIPELINE... OK" },
+    { threshold: 82, text: "> RENDERING INTERACTIVE INTERFACE... OK" },
+    { threshold: 92, text: "> VERIFYING SECURITY CERTIFICATES... OK" },
+    { threshold: 98, text: "> PORTAL ACTIVE. INITIALIZING REVEAL..." }
+];
+
+let printedLogs = new Set();
+
+function updateLogs(progress) {
+    if (!preloaderLogs) return;
+    
+    logMessages.forEach(msg => {
+        if (progress >= msg.threshold && !printedLogs.has(msg.text)) {
+            printedLogs.add(msg.text);
+            const line = document.createElement('div');
+            line.className = 'preloader-log-line';
+            line.textContent = msg.text;
+            preloaderLogs.appendChild(line);
+            
+            // Auto scroll to bottom
+            preloaderLogs.scrollTop = preloaderLogs.scrollHeight;
+        }
+    });
+}
 
 function startPreloader() {
     if (!preloader || !preloaderBar || !preloaderPercent) {
@@ -373,7 +513,7 @@ function startPreloader() {
     }
     
     let progress = 0;
-    const duration = 1200; // 1.2s loading simulation
+    const duration = 2000; // Increased to 2s for smoother log readability
     const startTime = performance.now();
     
     function updateProgress(now) {
@@ -382,6 +522,8 @@ function startPreloader() {
         
         preloaderBar.style.width = `${progress}%`;
         preloaderPercent.textContent = `${Math.floor(progress).toString().padStart(2, '0')}%`;
+        
+        updateLogs(progress);
         
         if (progress < 100) {
             requestAnimationFrame(updateProgress);
@@ -398,8 +540,8 @@ function startPreloader() {
                     // Trigger hero scroll reveals if they are there
                     const heroReveal = document.querySelector('.hero .reveal');
                     if (heroReveal) heroReveal.classList.add('active');
-                }, 1000); // matching CSS clip-path transition duration (1s)
-            }, 200);
+                }, 1200); // matching CSS clip-path transition duration (1.2s)
+            }, 300);
         }
     }
     
