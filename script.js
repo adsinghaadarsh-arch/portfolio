@@ -241,11 +241,17 @@ function typePhrase() {
 }
 
 // Start typewriter effect after preloader finishes
-document.addEventListener('DOMContentLoaded', () => {
+function startTypewriter() {
     if (typewriterTextElement) {
-        setTimeout(typePhrase, 2600); // 2.6s delay to sync with preloader slide-out
+        setTimeout(typePhrase, 3000); // 3s delay to sync with preloader slide-out
     }
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startTypewriter);
+} else {
+    startTypewriter();
+}
 
 // ==========================================
 // ADVANCED 3D PARALLAX TILT EFFECT
@@ -477,42 +483,34 @@ staggerContainers.forEach(container => {
 });
 
 // ==========================================
+// ==========================================
 // CUSTOM TECH PRELOADER ANIMATION
 // ==========================================
 const preloader = document.getElementById('preloader');
 const preloaderBar = document.getElementById('preloader-progress-bar');
 const preloaderPercent = document.getElementById('preloader-percentage');
-const preloaderLogs = document.getElementById('preloader-logs');
+const preloaderStatusEl = document.getElementById('preloader-status-el');
 
-const logMessages = [
-    { threshold: 0, text: "> SYSTEM INITIALIZATION..." },
-    { threshold: 12, text: "> STACK_CHECK: HTML5_CSS3_JS... OK" },
-    { threshold: 24, text: "> IMPORTING CREDENTIALS: ACCA_ASSETS... OK" },
-    { threshold: 38, text: "> PARSING BUSINESS_ANALYSIS_MODELS... OK" },
-    { threshold: 52, text: "> LOADING SPREADSHEETS (MS_EXCEL_API)... OK" },
-    { threshold: 68, text: "> INJECTING 3D RENDERING PIPELINE... OK" },
-    { threshold: 82, text: "> RENDERING INTERACTIVE INTERFACE... OK" },
-    { threshold: 92, text: "> VERIFYING SECURITY CERTIFICATES... OK" },
-    { threshold: 98, text: "> PORTAL ACTIVE. INITIALIZING REVEAL..." }
+const statusPhases = [
+    { threshold: 0, text: "Loading Portfolio Data..." },
+    { threshold: 30, text: "Securing Credentials..." },
+    { threshold: 60, text: "Rendering 3D Portal..." },
+    { threshold: 90, text: "Interface Ready." }
 ];
 
-let printedLogs = new Set();
-
-function updateLogs(progress) {
-    if (!preloaderLogs) return;
+function updateStatusText(progress) {
+    if (!preloaderStatusEl) return;
     
-    logMessages.forEach(msg => {
-        if (progress >= msg.threshold && !printedLogs.has(msg.text)) {
-            printedLogs.add(msg.text);
-            const line = document.createElement('div');
-            line.className = 'preloader-log-line';
-            line.textContent = msg.text;
-            preloaderLogs.appendChild(line);
-            
-            // Auto scroll to bottom
-            preloaderLogs.scrollTop = preloaderLogs.scrollHeight;
+    let activeText = statusPhases[0].text;
+    statusPhases.forEach(phase => {
+        if (progress >= phase.threshold) {
+            activeText = phase.text;
         }
     });
+    
+    if (preloaderStatusEl.textContent !== activeText) {
+        preloaderStatusEl.textContent = activeText;
+    }
 }
 
 function startPreloader() {
@@ -522,7 +520,7 @@ function startPreloader() {
     }
     
     let progress = 0;
-    const duration = 2000; // Increased to 2s for smoother log readability
+    const duration = 1600; // Clean 1.6 seconds loading duration
     const startTime = performance.now();
     
     function updateProgress(now) {
@@ -532,7 +530,7 @@ function startPreloader() {
         preloaderBar.style.width = `${progress}%`;
         preloaderPercent.textContent = `${Math.floor(progress).toString().padStart(2, '0')}%`;
         
-        updateLogs(progress);
+        updateStatusText(progress);
         
         if (progress < 100) {
             requestAnimationFrame(updateProgress);
@@ -557,10 +555,12 @@ function startPreloader() {
     requestAnimationFrame(updateProgress);
 }
 
-// Start preloader on DOM Content Loaded
-document.addEventListener('DOMContentLoaded', () => {
+// Start preloader safely checking document.readyState
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startPreloader);
+} else {
     startPreloader();
-});
+}
 
 // ==========================================
 // CUSTOM TECH CURSOR MOUSE TRACKING
